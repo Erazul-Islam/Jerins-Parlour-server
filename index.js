@@ -27,11 +27,30 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
 
         const serviceCollection = client.db('jerins').collection('services')
+        const testimonialCollection = client.db('jerins').collection('testimonials')
+        const usersCollection = client.db('jerins').collection('users')
 
         app.get('/services',async(req,res) => {
             const cursor = serviceCollection.find();
             const result = await cursor.toArray();
             res.send(result)
+        })
+
+        app.get('/testimonials',async(req,res) => {
+            const cursor = testimonialCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        app.post('/users',async(req,res) => {
+            const user = req.body
+            const query = {email:user.email}
+            const existingUser = await usersCollection.findOne(query)
+            if(existingUser){
+                return res.send({message: 'already exist', insertedId: null})
+            }
+            const result = await usersCollection.insertOne(user)
+            res.send(result);
         })
 
 

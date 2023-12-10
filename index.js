@@ -37,6 +37,12 @@ async function run() {
             res.send(result)
         })
 
+        app.post('/services',async(req,res) => {
+            const service = req.body;
+            const result = await serviceCollection.insertOne(service);
+            res.send(result)
+        })
+
         app.get('/testimonials',async(req,res) => {
             const cursor = testimonialCollection.find();
             const result = await cursor.toArray();

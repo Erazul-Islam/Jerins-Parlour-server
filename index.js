@@ -30,6 +30,7 @@ async function run() {
         const testimonialCollection = client.db('jerins').collection('testimonials')
         const usersCollection = client.db('jerins').collection('users')
         const bookingList = client.db('jerins').collection('bookings')
+        const projectCollection = client.db('jerins').collection('projects')
 
         app.get('/services',async(req,res) => {
             const cursor = serviceCollection.find();
@@ -43,8 +44,24 @@ async function run() {
             res.send(result)
         })
 
+        app.post('/testimonials',async(req,res) => {
+            const cursor = req.body;
+            const result = await testimonialCollection.insertOne(cursor);
+            res.send(result)
+        })
+        app.post('/projects',async(req,res) => {
+            const cursor = req.body;
+            const result = await projectCollection.insertOne(cursor);
+            res.send(result)
+        })
+
         app.get('/testimonials',async(req,res) => {
             const cursor = testimonialCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+        app.get('/projects',async(req,res) => {
+            const cursor = projectCollection.find();
             const result = await cursor.toArray();
             res.send(result)
         })
